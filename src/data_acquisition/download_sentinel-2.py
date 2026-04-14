@@ -16,8 +16,8 @@ YEAR = 2023
 PRODUCT_TYPE = "S2MSI2A"  
 
 # AUTHENTIFICATION
-os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__USERNAME"] = "damba.kone@umontpellier.fr"
-os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__PASSWORD"] = "0767991488Dk@"
+os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__USERNAME"] = "EMAIL_COMPTE_COPERNICUS_DATASPACE"
+os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__PASSWORD"] = "MOT_DE_PASSE_COMPTE_COPERNICUS_DATASPACE"
 
 # Fenêtres mensuelles
 MONTHS = [
@@ -87,8 +87,7 @@ def download_s2(dag, roi, start_date, end_date):
         geom=roi,
         provider="cop_dataspace",
         start=start_date,
-        end=end_date,
-        cloudCover=MAX_CLOUD_COVER
+        end=end_date
     )
 
     print(f"{len(results)} produits trouvés entre {start_date} et {end_date}")
