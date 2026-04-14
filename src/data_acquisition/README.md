@@ -17,6 +17,20 @@ Deux capteurs sont utilisés :
 
 ---
 
+# Documentation
+
+## `Prise_en_main_et_téléchargement_avec_EODAG.pdf`
+
+Document détaillant :
+
+* la zone d’étude
+* les BBOX
+* le téléchargement Sentinel-1 / Sentinel-2
+* l’organisation des scripts
+* les tests du pipeline
+  
+---
+
 # Scripts disponibles
 
 ## `generate_bboxes_mangrove.py`
