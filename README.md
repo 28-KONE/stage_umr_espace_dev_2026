@@ -72,6 +72,7 @@ stage_umr_espace_dev_2026/
 |   │
 |   ├── data_acquisition/
 |   │   ├── README.md
+        ├── Prise_en_main_et_téléchargement_avec_EODAG.pdf
 |   │   ├── generate_bboxes_mangrove.py
 |   │   ├── download_sentinel1.py
 |   │   ├── download_sentinel2.py
