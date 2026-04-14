@@ -66,12 +66,22 @@ Objectif :
 ```text id="repo01"
 stage_umr_espace_dev_2026/
 │
-├── src/                # Code principal
-│   ├── data/           # Préparation des données
-│   ├── models/         # Modèles IA
-│   ├── training/       # Entraînement
-│   ├── inference/      # Prédictions
-│   └── utils/          # Fonctions utilitaires
+├── src/
+|   │
+|   ├── README.md
+|   │
+|   ├── data_acquisition/
+|   │   ├── README.md
+|   │   ├── generate_bboxes_mangrove.py
+|   │   ├── download_sentinel1.py
+|   │   ├── download_sentinel2.py
+|   │   └── run_downloads.py
+|   │
+|   ├── preprocessing/
+|   ├── models/
+|   ├── training/
+|   ├── inference/
+|   └── utils/
 │
 ├── notebooks/          # Exploration / prototypes
 ├── docs/               # Documentation technique
@@ -82,6 +92,12 @@ stage_umr_espace_dev_2026/
 ├── requirements.txt
 └── README.md
 ```
+##  Documentation
+
+Le dossier `docs/` contient la documentation technique du projet.
+
+* `Prise_en_main_et_téléchargement_avec_EODAG.pdf`
+  Présentation de la procédure de téléchargement Sentinel-1 / Sentinel-2 avec EODAG.
 
 ---
 
