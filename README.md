@@ -147,6 +147,7 @@ Image patches currently used for deep learning experiments have a spatial size o
 
 ```text
 128 × 128 pixels
+```
 
 at 10 m spatial resolution.
 
