@@ -1,196 +1,151 @@
-# stage_umr_espace_dev_2026
+# Deep Learning for Mangrove Mapping from Sentinel-1 and Sentinel-2 Imagery
 
-## Apprentissage profond auto-supervisé pour la cartographie multi-échelle des mangroves à partir d’images Pléiades et Sentinel
+Repository associated with the 2026 research internship conducted at **UMR Espace-Dev (IRD)** on deep learning methods for mangrove mapping from Earth observation data.
 
-Dépôt privé de développement créé dans le cadre de mon stage de M2 2026.
-Ce projet s’inscrit dans les programmes de recherche :
+The project investigates the use of **multimodal satellite imagery** and **pretrained representation learning models** for large-scale mangrove monitoring along the Amazon-influenced coast of South America.
 
-* **ESA Coastal Blue Carbon** (2024–2026)
-* **ANIMALS** – *Artificial iNtellIgence for the mapping of MAngrove at Large Scale* (CNES, 2025–2027)
+The main remote sensing sources are:
 
----
+- **Sentinel-1** Synthetic Aperture Radar (SAR) imagery;
+- **Sentinel-2** multispectral optical imagery.
 
-# Objectif
+The work focuses on two main tasks:
 
-Ce stage vise à développer des méthodes d’**intelligence artificielle auto-supervisée** pour cartographier les mangroves à différentes échelles spatiales à partir d’images satellites :
+1. **Mangrove extent mapping**;
+2. **Mangrove habitat classification**.
 
-* **Pléiades** (Très Haute Résolution Spatiale – 50 cm)
-* **Sentinel-1 / Sentinel-2** (Haute Résolution Spatiale – 10 m)
-
-L’objectif principal est de transférer l’information fine issue des images Pléiades vers les images Sentinel afin de produire des cartographies robustes à large échelle :
-
-* Étendue des mangroves
-* Types d’habitats forestiers
-* Biomasse aérienne
-* Stocks de carbone
+The repository contains the main scripts used for data acquisition, preprocessing, dataset construction, model training, evaluation and inference.
 
 ---
 
-# Contexte
+## 1. Scientific context
 
-Les mangroves jouent un rôle majeur dans :
+Mangroves are intertidal forest ecosystems occurring along tropical and subtropical coastlines. They provide important ecosystem services including:
 
-* la protection des littoraux
-* la biodiversité
-* le stockage du carbone bleu
-* l’atténuation du changement climatique
+- coastal protection;
+- biodiversity support;
+- nursery habitats;
+- carbon sequestration and storage;
+- climate-change mitigation.
 
-La zone d’étude principale concerne :
+Monitoring mangrove extent and ecological condition over large areas remains challenging because field surveys and very-high-resolution imagery are costly and difficult to acquire systematically.
 
-* **Guyane française**
-* Côte sous influence amazonienne :
+Satellite Earth observation provides a complementary solution. In particular, **Sentinel-1** and **Sentinel-2** offer free, recurrent and spatially extensive observations with complementary information:
 
-  * Brésil
-  * Suriname
-  * Guyana
+- Sentinel-1 provides radar information related to surface structure and moisture and is largely independent of cloud cover;
+- Sentinel-2 provides multispectral information related to vegetation properties and spectral characteristics.
 
----
-
-# Approche IA
-
-Le projet repose sur des approches de **self-supervised learning** appliquées à la télédétection.
-
-Modèles envisagés :
-
-* **CROMA** (Foundation model)
-* autres architectures selon expérimentation
-
-Objectif :
-
-> entraîner un modèle à reproduire des annotations fines générées à partir d’images Pléiades, en utilisant uniquement des images Sentinel à grande échelle.
+The combination of both modalities is therefore particularly relevant in tropical environments where persistent cloud cover can limit optical observations.
 
 ---
 
-# Structure du repository
+## 2. Objectives
 
-```text id="repo01"
-stage_umr_espace_dev_2026/
-│
-├── src/
-|   │
-|   ├── README.md
-|   │
-|   ├── data_acquisition/
-|   │   ├── README.md
-        ├── Prise_en_main_et_téléchargement_avec_EODAG.pdf
-|   │   ├── generate_bboxes_mangrove.py
-|   │   ├── download_sentinel1.py
-|   │   ├── download_sentinel2.py
-|   │   └── run_downloads.py
-|   │
-|   ├── preprocessing/
-|   ├── models/
-|   ├── training/
-|   ├── inference/
-|   └── utils/
-│
-├── notebooks/          # Exploration / prototypes
-├── docs/               # Documentation technique
-├── tests/              # Tests unitaires
-├── configs/            # Fichiers YAML / paramètres
-├── outputs/            # Résultats, cartes, modèles
-├── environment.yml     # Environnement Conda
-├── requirements.txt
-└── README.md
-```
-##  Documentation
+The general objective of this project is to investigate deep learning approaches for extracting information on mangrove ecosystems from Sentinel-1 and Sentinel-2 imagery at 10 m spatial resolution.
 
-Le dossier `docs/` contient la documentation technique du projet.
+The work is organized around several downstream applications:
 
-* `Prise_en_main_et_téléchargement_avec_EODAG.pdf`
-  Présentation de la procédure de téléchargement Sentinel-1 / Sentinel-2 avec EODAG.
+### Mangrove extent mapping
+
+Binary semantic segmentation is used to distinguish:
+
+- mangrove;
+- non-mangrove.
+
+The objective is to produce spatially consistent mangrove maps from multimodal Sentinel imagery.
+
+### Mangrove habitat classification
+
+Within mapped mangrove areas, a second semantic segmentation task aims to distinguish four ecological stages:
+
+| Class | Habitat stage |
+|---|---|
+| 0 | Young |
+| 1 | Adult |
+| 2 | Mature |
+| 3 | Senescent |
+
+The classification is performed from Sentinel-1 and Sentinel-2 image patches using deep neural networks.
+
+### Biomass and carbon
+
+The workflow is also designed to provide a basis for subsequent estimation of:
+
+- above-ground biomass;
+- carbon stocks.
+
+These components rely on dedicated reference products and constitute an extension of the mapping framework.
 
 ---
 
-# Missions principales
+## 3. Study area
 
-*  État de l’art sur les méthodes IA de passage à l’échelle
-*  Implémentation d’un modèle auto-supervisé
-*  Construction de la base de données image
-*  Entraînement spécifique aux mangroves
-*  Production de cartes de texture (Pléiades)
-*  Cartographie grande échelle (Sentinel)
-*  Estimation biomasse / carbone
-*  Documentation technique complète
-*  Rapport de stage
+The main study area is the **coast of French Guiana**, characterized by highly dynamic mangrove ecosystems strongly influenced by sediment transport from the Amazon River.
 
----
+Depending on the experiment, the geographical scope can be extended along the Amazon-influenced coastline, including areas in:
 
-#  Installation
+- Suriname;
+- northern Brazil.
 
-## 1. Cloner le dépôt
-
-```bash id="git01"
-git clone <url-du-repo>
-cd stage_umr_espace_dev_2026
-```
-
-## 2. Installer les dépendances
-
-```bash id="git02"
-pip install -r requirements.txt
-```
-
-ou
-
-```bash id="git03"
-conda env create -f environment.yml
-conda activate mangrove-ai
-```
+The spatial extent used for data processing is divided into several geographical zones to facilitate satellite data acquisition, preprocessing and model evaluation.
 
 ---
 
-# Exemple d’utilisation
+## 4. Satellite data
 
-```bash id="run01"
-python src/training/train.py
-```
+### Sentinel-1
 
-```bash id="run02"
-python src/inference/predict.py
-```
+Sentinel-1 Ground Range Detected (GRD) products are used with the following polarizations:
 
----
+- VV;
+- VH.
 
-# Technologies utilisées
+The preprocessing workflow includes operations such as:
 
-* Python
-* PyTorch
-* Rasterio / GDAL
-* GeoPandas
-* NumPy / Pandas
-* Jupyter
-* Git / GitHub
+- orbit correction;
+- radiometric calibration;
+- terrain correction;
+- spatial alignment;
+- resampling to 10 m.
 
----
+### Sentinel-2
 
-# Résultats attendus
+Sentinel-2 Level-2A multispectral imagery is used.
 
-* Cartes annuelles des habitats forestiers de mangrove
-* Détection automatique des mangroves
-* Biomasse aérienne estimée
-* Stocks de carbone spatialement distribués
-* Méthode IA reproductible
+The workflow includes the following spectral bands:
 
----
+| Resolution | Bands |
+|---|---|
+| 10 m | B02, B03, B04, B08 |
+| 20 m | B05, B06, B07, B8A, B11, B12 |
+| 60 m | B01, B09 |
 
-# Bonnes pratiques
+Bands are resampled and spatially aligned before being used by the models.
 
-* Ne pas versionner les données sensibles ou volumineuses
-* Utiliser `.gitignore`
-* Commits réguliers et explicites
-* Documentation continue
+Cloud information is derived from the Sentinel-2 Scene Classification Layer and, depending on the experiment, additional cloud-detection approaches.
 
 ---
 
-# Auteur
+## 5. Multimodal data preparation
 
-28-KONE
-Master 2 Machine Learning for Artificial Intelligence – Stage 2026
-UMR Espace Dev - Université de Montpellier
+Sentinel-1 and Sentinel-2 acquisitions are temporally paired to construct multimodal observations.
 
----
+The main processing steps include:
 
-# Licence
+1. satellite product acquisition;
+2. Sentinel-1 preprocessing;
+3. Sentinel-2 preprocessing;
+4. cloud screening;
+5. spatial co-registration;
+6. temporal pairing;
+7. image normalization;
+8. reference-map alignment;
+9. extraction of fixed-size image patches;
+10. construction of train, validation and test datasets.
 
-Usage académique / recherche interne.
+Image patches currently used for deep learning experiments have a spatial size of:
+
+```text
+128 × 128 pixels
+
+
