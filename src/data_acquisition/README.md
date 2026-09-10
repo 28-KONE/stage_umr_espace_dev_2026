@@ -1,15 +1,15 @@
 # Data acquisition
 
-Ce module contient les scripts développés pour télécharger automatiquement les données.
+This module contains the scripts developed to automatically download the data used in this project.
 
-Les données proviennent de :
+Data are acquired from:
 
 - **Copernicus Data Space Ecosystem (CDSE)**;
 - **Microsoft Planetary Computer**.
 
-Les scripts permettent d'automatiser la recherche et le téléchargement des produits :
+The scripts automate the search and download of:
 
-- **Sentinel-1 GRD**, avec les polarisations VV et VH ;
-- **Sentinel-2 Level-2A**, incluant les bandes multispectrales et la Scene Classification Layer (SCL).
+- **Sentinel-1 GRD** products, including VV and VH polarizations;
+- **Sentinel-2 Level-2A** products, including multispectral bands and the Scene Classification Layer (SCL).
 
-Les téléchargements sont réalisés sur les différentes zones géographiques définies pour l'étude et selon les périodes temporelles nécessaires à la construction du jeu de données.
+Data are downloaded for the different geographical areas defined in the study and for the temporal periods required to construct the dataset.
