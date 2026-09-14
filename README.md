@@ -400,6 +400,37 @@ The alternative architectures remain competitive. **ResNet-50 + UPerNet** reache
 
 Overall, these experiments highlight the benefit of combining the multimodal representations extracted by CROMA with a more expressive semantic-segmentation decoder such as UPerNet.
 
+#### Terra-firme forest hard negatives
+
+An additional experiment was conducted to investigate one of the main sources of confusion in the binary segmentation task: the spectral and structural similarity between mangroves and inland terra-firme forests.
+
+Terra-firme forest pixels were introduced as explicit hard-negative examples during training while preserving the binary formulation of the problem: **mangrove vs. non-mangrove**.
+
+At a probability threshold of 0.50, the resulting CROMA + UPerNet model was compared with the original configuration:
+
+| Configuration | Accuracy | Precision | Recall | F1-score | IoU |
+|---|---:|---:|---:|---:|---:|
+| **CROMA + UPerNet** | 0.9431 | **0.9061** | 0.9380 | 0.9218 | 0.8549 |
+| **CROMA + UPerNet + terra-firme forest hard negatives** | **0.9488** | 0.9044 | **0.9579** | **0.9304** | **0.8698** |
+
+Introducing terra-firme forest hard negatives improves the overall binary segmentation performance. The IoU increases from **0.8549 to 0.8698**, while the F1-score increases from **0.9218 to 0.9304**. The largest improvement is observed for recall, which increases from **0.9380 to 0.9579**, with only a small decrease in precision from **0.9061 to 0.9044**.
+
+The model therefore detects a larger proportion of mangrove pixels while maintaining a similar level of precision.
+
+However, confusion with terra-firme forests remains substantial. Among the **151,220 terra-firme forest pixels** evaluated, **94,335 were predicted as mangrove**, corresponding to a forest-to-mangrove false-positive rate of **62.38%**.
+
+This result indicates that introducing terra-firme forests as hard negatives improves the global segmentation metrics but does not fully resolve the specific confusion between mangrove and inland forest.
+
+#### Perspectives
+
+A natural extension would be to reformulate the binary segmentation problem as a multiclass task in which terra-firme forest is represented as an explicit semantic class, for example:
+
+**mangrove / terra-firme forest / other non-mangrove**.
+
+Such a formulation could allow the model to learn a dedicated representation of terra-firme forests instead of grouping them with all other non-mangrove land-cover types. This could potentially improve the discrimination between mangrove and inland forest, although this hypothesis would need to be evaluated experimentally.
+
+A complementary analysis would also consist in measuring the forest-to-mangrove false-positive rate for the original CROMA + UPerNet model. This would make it possible to quantify whether the introduction of terra-firme forest hard negatives specifically reduces this source of confusion, independently of the improvement observed in the global segmentation metrics.
+
 ---
 
 ### 12.2 Multiclass mangrove habitat segmentation
