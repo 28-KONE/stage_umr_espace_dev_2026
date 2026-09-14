@@ -590,7 +590,7 @@ Because both the encoder fine-tuning strategy and the classification loss were m
 The main habitat-segmentation experiments can be summarized as follows:
 
 | Configuration | Macro F1 | Mean IoU | 
-|---|---:|---:|---:|
+|---|---:|---:|
 | ResNet-50 + DeepLabV3+ | 0.4165 | 0.2739 |
 | CROMA + UPerNet | 0.5067 | 0.3478 | 
 | **CROMA + UPerNet + auxiliary indices** | **0.5078** | **0.3513** | 
