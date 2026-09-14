@@ -465,7 +465,6 @@ Overall test performance:
 |---|---:|
 | Macro F1-score | **0.5067** |
 | Mean IoU | **0.3478** |
-| Ordinal MAE | **0.6333** |
 
 The **Mature** class is the best recognized habitat stage, reaching an IoU of **0.5108** and an F1-score of **0.6762**.
 
@@ -490,7 +489,6 @@ Overall test performance:
 |---|---:|
 | Macro F1-score | **0.4165** |
 | Mean IoU | **0.2739** |
-| Ordinal MAE | **0.6884** |
 
 Under the experimental protocol used in this study, **CROMA + UPerNet outperforms the ResNet-50 + DeepLabV3+ baseline across the three global evaluation metrics**.
 
@@ -501,11 +499,6 @@ Macro F1 : 0.4165 → 0.5067
 mIoU     : 0.2739 → 0.3478
 ```
 
-while reducing the ordinal error:
-
-```text
-Ordinal MAE : 0.6884 → 0.6333
-```
 
 This suggests that the multimodal representations extracted from Sentinel-1 and Sentinel-2 by CROMA provide more informative features for distinguishing mangrove habitat stages under the evaluated configuration.
 
@@ -537,12 +530,8 @@ Overall test performance:
 |---|---:|---:|
 | Macro F1-score | 0.5067 | **0.5078** |
 | Mean IoU | 0.3478 | **0.3513** |
-| Ordinal MAE | 0.6333 | **0.5784** |
 
-The auxiliary indices lead to only a marginal improvement in the global segmentation metrics. Macro F1 increases from **0.5067 to 0.5078** and
-mean IoU from **0.3478 to 0.3513**.
-
-Their contribution is more apparent for the ordinal consistency of the predictions. The ordinal MAE decreases from **0.6333 to 0.5784**, corresponding to a reduction of approximately **8.7%**.
+The auxiliary indices lead to only a marginal improvement in the global segmentation metrics. Macro F1 increases from **0.5067 to 0.5078** and mean IoU from **0.3478 to 0.3513**.
 
 However, this improvement is not uniform across habitat stages. The Mature and Senescent classes improve, while Young and Adult perform worse than with the original CROMA + UPerNet configuration:
 
@@ -587,9 +576,8 @@ Overall test performance:
 |---|---:|---:|
 | Macro F1-score | **0.5067** | 0.4993 |
 | Mean IoU | **0.3478** | 0.3422 |
-| Ordinal MAE | 0.6333 | **0.6234** |
 
-Partial fine-tuning combined with focal loss does not improve the overall segmentation performance compared with the original frozen CROMA configuration. Macro F1 decreases from **0.5067 to 0.4993** and mean IoU from **0.3478 to 0.3422**, while the ordinal MAE improves only slightly from **0.6333 to 0.6234**.
+Partial fine-tuning combined with focal loss does not improve the overall segmentation performance compared with the original frozen CROMA configuration. Macro F1 decreases from **0.5067 to 0.4993** and mean IoU from **0.3478 to 0.3422**.
 
 The Mature class again benefits the most from the modified training strategy, reaching an IoU of **0.5214**, compared with **0.5108** for the original model. However, the other three habitat classes obtain lower IoU values.
 
@@ -601,12 +589,12 @@ Because both the encoder fine-tuning strategy and the classification loss were m
 
 The main habitat-segmentation experiments can be summarized as follows:
 
-| Configuration | Macro F1 | Mean IoU | Ordinal MAE |
+| Configuration | Macro F1 | Mean IoU | 
 |---|---:|---:|---:|
-| ResNet-50 + DeepLabV3+ | 0.4165 | 0.2739 | 0.6884 |
-| CROMA + UPerNet | 0.5067 | 0.3478 | 0.6333 |
-| **CROMA + UPerNet + auxiliary indices** | **0.5078** | **0.3513** | **0.5784** |
-| CROMA partial fine-tuning + UPerNet + focal loss | 0.4993 | 0.3422 | 0.6234 |
+| ResNet-50 + DeepLabV3+ | 0.4165 | 0.2739 |
+| CROMA + UPerNet | 0.5067 | 0.3478 | 
+| **CROMA + UPerNet + auxiliary indices** | **0.5078** | **0.3513** | 
+| CROMA partial fine-tuning + UPerNet + focal loss | 0.4993 | 0.3422 | 
 
 Overall, **CROMA + UPerNet with auxiliary spectral indices achieves the best global results**, although the improvements in Macro F1 and mean IoU over the original CROMA + UPerNet model remain small.
 
@@ -616,8 +604,7 @@ This persistent confusion suggests that the remaining difficulty may not be expl
 
 #### Perspectives
 
-Further work could investigate the intrinsic separability of the four habitat stages from Sentinel-1 and Sentinel-2 observations before
-introducing additional model complexity.
+Further work could investigate the intrinsic separability of the four habitat stages from Sentinel-1 and Sentinel-2 observations before introducing additional model complexity.
 
 Possible directions include analyzing class distributions and confusion patterns across geographical areas, evaluating the effect of spatial resolution and mixed pixels, and investigating whether
 alternative habitat groupings provide a more robust representation of the ecological gradients.
