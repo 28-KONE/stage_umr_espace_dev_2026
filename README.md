@@ -453,7 +453,7 @@ The CROMA-based model achieved a best validation mIoU of:
 On the independent test set, the following class-wise performances were obtained:
 
 | Habitat class | Precision | Recall | F1-score | IoU |
-|---|---:|---:|---:|---:|
+|---|---:|---:|---:|
 | Young | 0.5716 | 0.4587 | 0.5090 | 0.3414 |
 | Adult | 0.4439 | 0.2823 | 0.3451 | 0.2086 |
 | Mature | 0.6135 | 0.7532 | 0.6762 | 0.5108 |
