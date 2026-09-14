@@ -69,3 +69,6 @@ Multiband GeoTIFF composites
 ```
 
 This band-wise strategy was designed to make the preprocessing pipeline more suitable for large satellite datasets by reducing memory requirements, facilitating parallel computation, and avoiding the need to manipulate all spectral or radar bands simultaneously.
+
+
+> **Note:** All experiments and processing steps in this project were performed on the Jean Zay supercomputer. The paths and directory structure used in the scripts are specific to this computing environment and must be adapted before running the code on another system.
