@@ -29,11 +29,11 @@ Each processed band is temporarily saved as a NumPy (`.npy`) file. This intermed
 The workflow can therefore be summarized as:
 
 ```text
-Band 1 ──► composite ──► band_1.npy
-Band 2 ──► composite ──► band_2.npy
-Band 3 ──► composite ──► band_3.npy
+Band 1 --> composite --> band_1.npy
+Band 2 --> composite --> band_2.npy
+Band 3 --> composite --> band_3.npy
   ...           ...
-Band N ──► composite ──► band_N.npy
+Band N --> composite --> band_N.npy
 ```
 
 ## 3. Band aggregation
