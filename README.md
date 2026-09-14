@@ -398,8 +398,6 @@ The threshold analysis also shows the expected precision-recall trade-off. Incre
 
 The alternative architectures remain competitive. **ResNet-50 + UPerNet** reaches an IoU of **0.8350** at threshold 0.65, while **DeepLabV3+** reaches **0.8198** at threshold 0.60. The simpler **CROMA + CNN** configuration performs substantially below the decoder-based architectures, with a maximum IoU of **0.7297**.
 
-Overall, these experiments highlight the benefit of combining the multimodal representations extracted by CROMA with a more expressive semantic-segmentation decoder such as UPerNet.
-
 #### Terra-firme forest hard negatives
 
 An additional experiment was conducted to investigate one of the main sources of confusion in the binary segmentation task: the spectral and structural similarity between mangroves and inland terra-firme forests.
@@ -428,8 +426,6 @@ A natural extension would be to reformulate the binary segmentation problem as a
 **mangrove / terra-firme forest / other non-mangrove**.
 
 Such a formulation could allow the model to learn a dedicated representation of terra-firme forests instead of grouping them with all other non-mangrove land-cover types. This could potentially improve the discrimination between mangrove and inland forest, although this hypothesis would need to be evaluated experimentally.
-
-A complementary analysis would also consist in measuring the forest-to-mangrove false-positive rate for the original CROMA + UPerNet model. This would make it possible to quantify whether the introduction of terra-firme forest hard negatives specifically reduces this source of confusion, independently of the improvement observed in the global segmentation metrics.
 
 ---
 
@@ -517,18 +513,117 @@ This suggests that the multimodal representations extracted from Sentinel-1 and 
 
 A complementary experiment investigates whether explicit vegetation information can further improve habitat classification.
 
-Four indices are introduced through an auxiliary convolutional branch:
+Four vegetation and moisture indices were introduced through an auxiliary convolutional branch:
 
-- MTCI;
-- NDMI;
-- red-edge NDVI;
-- NDVI.
+- **MTCI**;
+- **NDMI**;
+- **red-edge NDVI (NDVI_RE)**;
+- **NDVI**.
 
-The resulting architecture combines learned CROMA representations with explicitly derived spectral information before the final segmentation head.
+The auxiliary features were fused with the multimodal representations extracted by CROMA before the final segmentation head. The original ordinal cross-entropy loss and the same spatial train, validation and test partition were retained in order to isolate the contribution of the additional spectral information.
 
-The experiment is currently evaluated against the original **CROMA + UPerNet** configuration using the same spatial data partition and evaluation protocol.
+On the independent test set, the following performances were obtained:
 
-Final results will be added after completion of training and test evaluation.
+| Habitat class | Precision | Recall | F1-score | IoU |
+|---|---:|---:|---:|---:|
+| Young | 0.7385 | 0.3702 | 0.4932 | 0.3273 |
+| Adult | 0.4776 | 0.2327 | 0.3130 | 0.1855 |
+| Mature | 0.5838 | 0.8505 | 0.6924 | 0.5295 |
+| Senescent | 0.5393 | 0.5262 | 0.5326 | 0.3630 |
+
+Overall test performance:
+
+| Metric | CROMA + UPerNet | + Auxiliary indices |
+|---|---:|---:|
+| Macro F1-score | 0.5067 | **0.5078** |
+| Mean IoU | 0.3478 | **0.3513** |
+| Ordinal MAE | 0.6333 | **0.5784** |
+
+The auxiliary indices lead to only a marginal improvement in the global segmentation metrics. Macro F1 increases from **0.5067 to 0.5078** and
+mean IoU from **0.3478 to 0.3513**.
+
+Their contribution is more apparent for the ordinal consistency of the predictions. The ordinal MAE decreases from **0.6333 to 0.5784**, corresponding to a reduction of approximately **8.7%**.
+
+However, this improvement is not uniform across habitat stages. The Mature and Senescent classes improve, while Young and Adult perform worse than with the original CROMA + UPerNet configuration:
+
+| Habitat class | F1 original | F1 + indices | IoU original | IoU + indices |
+|---|---:|---:|---:|---:|
+| Young | **0.5090** | 0.4932 | **0.3414** | 0.3273 |
+| Adult | **0.3451** | 0.3130 | **0.2086** | 0.1855 |
+| Mature | 0.6762 | **0.6924** | 0.5108 | **0.5295** |
+| Senescent | 0.4966 | **0.5326** | 0.3303 | **0.3630** |
+
+The confusion analysis also reveals an increased tendency to assign pixels to the Mature class. In particular, the proportion of Adult pixels classified as Mature increases from **41.18% to 53.81%**, while Young-to-Mature confusion increases from **36.04% to 44.71%**.
+
+These results suggest that the explicit spectral indices provide complementary information, particularly for ordinal consistency and the later habitat stages, but they do not resolve the main confusion between ecological stages. Instead, they reinforce the tendency of the model to favor the Mature class.
+
+#### Partial fine-tuning and focal-loss experiment
+
+A final experiment investigated whether adapting part of the pretrained CROMA encoder to the habitat segmentation task could improve the discrimination between ecological stages.
+
+Instead of keeping the complete CROMA encoder frozen, the last transformer blocks of the Sentinel-1, Sentinel-2 and joint SAR-optical branches were fine-tuned using a lower learning rate than
+the segmentation decoder.
+
+A focal classification loss combined with the ordinal component was also evaluated in this configuration.
+
+The resulting model reached a best validation mIoU of:
+
+```text
+0.3929
+```
+
+On the independent test set, the following performances were obtained:
+
+| Habitat class | Precision | Recall | F1-score | IoU |
+|---|---:|---:|---:|---:|
+| Young | 0.6616 | 0.3874 | 0.4887 | 0.3234 |
+| Adult | 0.4229 | 0.2773 | 0.3350 | 0.2012 |
+| Mature | 0.5972 | 0.8042 | 0.6854 | 0.5214 |
+| Senescent | 0.4960 | 0.4803 | 0.4880 | 0.3228 |
+
+Overall test performance:
+
+| Metric | CROMA + UPerNet | Partial fine-tuning + focal loss |
+|---|---:|---:|
+| Macro F1-score | **0.5067** | 0.4993 |
+| Mean IoU | **0.3478** | 0.3422 |
+| Ordinal MAE | 0.6333 | **0.6234** |
+
+Partial fine-tuning combined with focal loss does not improve the overall segmentation performance compared with the original frozen CROMA configuration. Macro F1 decreases from **0.5067 to 0.4993** and mean IoU from **0.3478 to 0.3422**, while the ordinal MAE improves only slightly from **0.6333 to 0.6234**.
+
+The Mature class again benefits the most from the modified training strategy, reaching an IoU of **0.5214**, compared with **0.5108** for the original model. However, the other three habitat classes obtain lower IoU values.
+
+The confusion matrix confirms that the tendency to predict the Mature class remains. Adult-to-Mature confusion increases from **41.18% to 49.27%**, Young-to-Mature confusion from **36.04% to 40.40%**, and Senescent-to-Mature confusion from **30.44% to 33.22%**.
+
+Because both the encoder fine-tuning strategy and the classification loss were modified in this experiment, their individual contributions cannot be isolated from these results. The experiment should therefore be interpreted as an evaluation of the combined configuration rather than as evidence that partial fine-tuning alone is detrimental.
+
+#### Overall comparison
+
+The main habitat-segmentation experiments can be summarized as follows:
+
+| Configuration | Macro F1 | Mean IoU | Ordinal MAE |
+|---|---:|---:|---:|
+| ResNet-50 + DeepLabV3+ | 0.4165 | 0.2739 | 0.6884 |
+| CROMA + UPerNet | 0.5067 | 0.3478 | 0.6333 |
+| **CROMA + UPerNet + auxiliary indices** | **0.5078** | **0.3513** | **0.5784** |
+| CROMA partial fine-tuning + UPerNet + focal loss | 0.4993 | 0.3422 | 0.6234 |
+
+Overall, **CROMA + UPerNet with auxiliary spectral indices achieves the best global results**, although the improvements in Macro F1 and mean IoU over the original CROMA + UPerNet model remain small.
+
+More generally, the experiments consistently show that the **Mature** class is the easiest habitat stage to identify, whereas **Adult** is the most difficult. Several model variants increase the recognition of Mature pixels but simultaneously increase the tendency to assign pixels from the other habitat stages to this class.
+
+This persistent confusion suggests that the remaining difficulty may not be explained solely by model architecture or loss formulation. Mangrove habitat stages represent a gradual ecological succession, with transitional areas and potentially mixed pixels at Sentinel spatial resolution. Consequently, the spectral and radar signatures of neighboring stages may overlap substantially.
+
+#### Perspectives
+
+Further work could investigate the intrinsic separability of the four habitat stages from Sentinel-1 and Sentinel-2 observations before
+introducing additional model complexity.
+
+Possible directions include analyzing class distributions and confusion patterns across geographical areas, evaluating the effect of spatial resolution and mixed pixels, and investigating whether
+alternative habitat groupings provide a more robust representation of the ecological gradients.
+
+Higher-resolution observations, when available, could also help assess whether some of the remaining confusion originates from the 10 m spatial resolution of the Sentinel data rather than from the
+segmentation architecture itself.
 
 ---
 
