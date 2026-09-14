@@ -450,10 +450,10 @@ The CROMA-based model achieved a best validation mIoU of:
 0.3919
 ```
 
-On the independent test set, the following class-wise performances were obtained:
+On the test set, the following class-wise performances were obtained:
 
 | Habitat class | Precision | Recall | F1-score | IoU |
-|---|---:|---:|---:|
+|---|---:|---:|---:|---:|
 | Young | 0.5716 | 0.4587 | 0.5090 | 0.3414 |
 | Adult | 0.4439 | 0.2823 | 0.3451 | 0.2086 |
 | Mature | 0.6135 | 0.7532 | 0.6762 | 0.5108 |
@@ -470,7 +470,7 @@ The **Mature** class is the best recognized habitat stage, reaching an IoU of **
 
 The **Adult** class remains the most difficult to distinguish, with an IoU of **0.2086**. Confusion analysis shows that a substantial proportion of Adult pixels are assigned to the Mature class.
 
-These results illustrate the difficulty of distinguishing ecological stages that form a gradual vegetation succession rather than strictly separated land-cover categories.
+These results illustrate the difficulty of distinguishing ecological stages that form a gradual vegetation succession.
 
 #### ResNet-50 + DeepLabV3+
 
@@ -499,9 +499,6 @@ Macro F1 : 0.4165 → 0.5067
 mIoU     : 0.2739 → 0.3478
 ```
 
-
-This suggests that the multimodal representations extracted from Sentinel-1 and Sentinel-2 by CROMA provide more informative features for distinguishing mangrove habitat stages under the evaluated configuration.
-
 #### Auxiliary spectral-index experiment
 
 A complementary experiment investigates whether explicit vegetation information can further improve habitat classification.
@@ -513,9 +510,9 @@ Four vegetation and moisture indices were introduced through an auxiliary convol
 - **red-edge NDVI (NDVI_RE)**;
 - **NDVI**.
 
-The auxiliary features were fused with the multimodal representations extracted by CROMA before the final segmentation head. The original ordinal cross-entropy loss and the same spatial train, validation and test partition were retained in order to isolate the contribution of the additional spectral information.
+The auxiliary features were fused with the multimodal representations extracted by CROMA before the final segmentation head. 
 
-On the independent test set, the following performances were obtained:
+On the test set, the following performances were obtained:
 
 | Habitat class | Precision | Recall | F1-score | IoU |
 |---|---:|---:|---:|---:|
@@ -544,7 +541,7 @@ However, this improvement is not uniform across habitat stages. The Mature and S
 
 The confusion analysis also reveals an increased tendency to assign pixels to the Mature class. In particular, the proportion of Adult pixels classified as Mature increases from **41.18% to 53.81%**, while Young-to-Mature confusion increases from **36.04% to 44.71%**.
 
-These results suggest that the explicit spectral indices provide complementary information, particularly for ordinal consistency and the later habitat stages, but they do not resolve the main confusion between ecological stages. Instead, they reinforce the tendency of the model to favor the Mature class.
+These results suggest that the explicit spectral indices provide complementary information, but they do not resolve the main confusion between ecological stages. Instead, they reinforce the tendency of the model to favor the Mature class.
 
 #### Partial fine-tuning and focal-loss experiment
 
@@ -561,7 +558,7 @@ The resulting model reached a best validation mIoU of:
 0.3929
 ```
 
-On the independent test set, the following performances were obtained:
+On the test set, the following performances were obtained:
 
 | Habitat class | Precision | Recall | F1-score | IoU |
 |---|---:|---:|---:|---:|
@@ -583,8 +580,6 @@ The Mature class again benefits the most from the modified training strategy, re
 
 The confusion matrix confirms that the tendency to predict the Mature class remains. Adult-to-Mature confusion increases from **41.18% to 49.27%**, Young-to-Mature confusion from **36.04% to 40.40%**, and Senescent-to-Mature confusion from **30.44% to 33.22%**.
 
-Because both the encoder fine-tuning strategy and the classification loss were modified in this experiment, their individual contributions cannot be isolated from these results. The experiment should therefore be interpreted as an evaluation of the combined configuration rather than as evidence that partial fine-tuning alone is detrimental.
-
 #### Overall comparison
 
 The main habitat-segmentation experiments can be summarized as follows:
@@ -600,17 +595,6 @@ Overall, **CROMA + UPerNet with auxiliary spectral indices achieves the best glo
 
 More generally, the experiments consistently show that the **Mature** class is the easiest habitat stage to identify, whereas **Adult** is the most difficult. Several model variants increase the recognition of Mature pixels but simultaneously increase the tendency to assign pixels from the other habitat stages to this class.
 
-This persistent confusion suggests that the remaining difficulty may not be explained solely by model architecture or loss formulation. Mangrove habitat stages represent a gradual ecological succession, with transitional areas and potentially mixed pixels at Sentinel spatial resolution. Consequently, the spectral and radar signatures of neighboring stages may overlap substantially.
-
-#### Perspectives
-
-Further work could investigate the intrinsic separability of the four habitat stages from Sentinel-1 and Sentinel-2 observations before introducing additional model complexity.
-
-Possible directions include analyzing class distributions and confusion patterns across geographical areas, evaluating the effect of spatial resolution and mixed pixels, and investigating whether
-alternative habitat groupings provide a more robust representation of the ecological gradients.
-
-Higher-resolution observations, when available, could also help assess whether some of the remaining confusion originates from the 10 m spatial resolution of the Sentinel data rather than from the
-segmentation architecture itself.
 
 ---
 
@@ -633,47 +617,54 @@ stage_umr_espace_dev_2026/
 │   │
 │   ├── data_acquisition/
 │   │   ├── README.md
-│   │   ├── generate_bboxes_mangrove.py
+│   │   ├── download_s1_with_copernicus_dataspace.py
+│   │   ├── download_s2_with_copernicus_dataspace.py
+│   │   ├── download_s1_with_planetary_computer.py
+│   │   ├── download_s2_with_planetary_computer.py
+│   │   └── run_downloads.py
+│   │
+│   ├── preprocessing/
+│   │   ├── README.md
+│   │   ├── bands_s1_gatherall.py
+│   │   ├── bands_s2_gatherall.py
+│   │   ├── build_s1_seasonal_composite.py
+│   │   ├── build_s2_seasonal_composite.py
+│   │   ├── preprocessing_s1.py
+│   │   └── preprocessing_s2.py
+│   │
+│   ├── temporal_composites/
+│   │   ├── README.md
 │   │   ├── download_sentinel1.py
 │   │   ├── download_sentinel2.py
 │   │   └── run_downloads.py
 │   │
-│   ├── preprocessing/
-│   │   └── ...
-│   │
-│   ├── temporal_composites/
-│   │   └── ...
-│   │
 │   ├── datasets/
-│   │   └── ...
+│   │   ├── README.md
+│   │   ├── download_sentinel1.py
+│   │   ├── download_sentinel2.py
+│   │   └── run_downloads.py
 │   │
 │   ├── models/
 │   │   ├── binary_segmentation/
 │   │   └── habitat_classification/
 │   │
 │   ├── training/
-│   │   └── ...
+│   │   ├── README.md
+│   │   ├── download_sentinel1.py
+│   │   ├── download_sentinel2.py
+│   │   └── run_downloads.py
 │   │
-│   ├── evaluation/
-│   │   └── ...
-│   │
-│   ├── inference/
-│   │   └── ...
-│   │
-│   └── utils/
-│       └── ...
-│
 ├── notebooks/
 │   └── ...
 │
 ├── docs/
-│   └── ...
-│
-├── tests/
-│   └── ...
-│
+│   │   ├── README.md
+│   │   ├── download_sentinel1.py
+│   │   ├── download_sentinel2.py
+│   │   └── run_downloads.py
+│   │
 └── outputs/
     └── ...
 ```
 
-The repository intentionally separates data acquisition, preprocessing, temporal compositing, dataset construction, model development, training, evaluation and inference to facilitate reproducibility and reuse.
+The repository separates data acquisition, preprocessing, temporal compositing, dataset construction, model development, training, evaluation and inference.
