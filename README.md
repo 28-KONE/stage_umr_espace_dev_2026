@@ -632,12 +632,6 @@ stage_umr_espace_dev_2026/
 │   │   ├── preprocessing_s1.py
 │   │   └── preprocessing_s2.py
 │   │
-│   ├── temporal_composites/
-│   │   ├── README.md
-│   │   ├── download_sentinel1.py
-│   │   ├── download_sentinel2.py
-│   │   └── run_downloads.py
-│   │
 │   ├── datasets/
 │   │   ├── README.md
 │   │   ├── download_sentinel1.py
