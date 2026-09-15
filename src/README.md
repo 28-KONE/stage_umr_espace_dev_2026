@@ -33,5 +33,4 @@ Sentinel-1 / Sentinel-2
      ▼         ▼
   Mangrove   Mangrove habitat
 segmentation  classification
-```text
-
+```
