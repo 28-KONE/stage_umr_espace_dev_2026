@@ -632,6 +632,27 @@ stage_umr_espace_dev_2026/
 │   │   ├── preprocessing_s1.py
 │   │   └── preprocessing_s2.py
 │   │
+│   ├── training/
+│   │   ├── README.md
+│   │   ├── habitat_segmentation/
+|   │   |   ├── habitats_segmentation_with_croma_upernet.py
+|   │   |   ├── habitats_segmentation_with_croma_upernet_and_auxiliary_branch.py
+|   │   |   └── habitats_segmentation_with_croma_upernet_and_partial_finetuning.py
+|   │   |
+│   │   ├── mangrove_segmentation/
+|   │   │   ├── README.md
+|   │   |   ├── experiments/
+|   |   │   |   ├── mangroves_segmentation_with_croma_cnn_guyane_suriname_amapa.py
+|   |   │   |   ├── mangroves_segmentation_with_croma_cnn_guyane_suriname_amapa_+_forest_terra_firme.py
+|   |   │   |   ├── mangroves_segmentation_with_deeplabv3_guyane_suriname_amapa.py
+|   |   │   |   ├── mangroves_segmentation_with_deeplabv3_guyane_suriname_amapa_+_forest_terra_firme.py
+|   |   │   |   ├── mangroves_segmentation_with_resnet50_upernet_guyane_suriname_amapa.py
+|   │   |   |   └── mangroves_segmentation_with_resnet50_upernet_guyane_suriname_amapa_+_forest_terra_firme.py
+|   │   |
+|   │   |   └── selected_models/
+|   |   │   |   ├── mangroves_segmentation_with_croma_upernet_guyane_suriname_amapa.py
+|   |   │   |   └── mangroves_segmentation_with_croma_upernet_guyane_suriname_amapa_+_forest_terra_firme.py
+|   |   | 
 │   ├── datasets/
 │   │   ├── README.md
 │   │   ├── download_sentinel1.py
@@ -641,21 +662,11 @@ stage_umr_espace_dev_2026/
 │   ├── models/
 │   │   ├── binary_segmentation/
 │   │   └── habitat_classification/
-│   │
-│   ├── training/
-│   │   ├── README.md
-│   │   ├── download_sentinel1.py
-│   │   ├── download_sentinel2.py
-│   │   └── run_downloads.py
-│   │
-├── notebooks/
-│   └── ...
 │
 ├── docs/
 │   │   ├── README.md
-│   │   ├── download_sentinel1.py
-│   │   ├── download_sentinel2.py
-│   │   └── run_downloads.py
+│   │   ├── Article_Damba_WorkShop_NeurIPS_2026.pdf
+│   │   └── Memoire_M2_MALIA_Damba_KONE.pdf
 │   │
 └── outputs/
     └── ...
