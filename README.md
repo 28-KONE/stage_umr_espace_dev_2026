@@ -661,15 +661,17 @@ stage_umr_espace_dev_2026/
 │   │
 │   ├── models/
 │   │   ├── binary_segmentation/
+│   │   |   ├── best_model_croma_upernet.pth
+|   │   |   └── ....
+│   │
 │   │   └── habitat_classification/
+|   │   |   └── ....
 │
 ├── docs/
 │   │   ├── README.md
 │   │   ├── Article_Damba_WorkShop_NeurIPS_2026.pdf
 │   │   └── Memoire_M2_MALIA_Damba_KONE.pdf
-│   │
-└── outputs/
-    └── ...
+
 ```
 
 The repository separates data acquisition, preprocessing, temporal compositing, dataset construction, model development, training, evaluation and inference.
