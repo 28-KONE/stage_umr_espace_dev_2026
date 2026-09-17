@@ -652,12 +652,6 @@ stage_umr_espace_dev_2026/
 |   │   |   └── selected_models/
 |   |   │   |   ├── mangroves_segmentation_with_croma_upernet_guyane_suriname_amapa.py
 |   |   │   |   └── mangroves_segmentation_with_croma_upernet_guyane_suriname_amapa_+_forest_terra_firme.py
-|   |   | 
-│   ├── datasets/
-│   │   ├── README.md
-│   │   ├── download_sentinel1.py
-│   │   ├── download_sentinel2.py
-│   │   └── run_downloads.py
 │   │
 │   ├── models/
 │   │   ├── binary_segmentation/
